@@ -81,6 +81,7 @@ function createPlayer(name, marker) {
 
     const placeMarker = function(position) {
         if (gameFlow.lastPlacement == marker) return `Not ${name}'s Turn!`;
+        if (gameboard.squares[position - 1] !== null) return `This square haas already been marked with ${gameboard.squares[position - 1]}`;
 
         gameFlow.lastPlacement = marker;
         gameboard.squares[position - 1] = marker;
