@@ -11,18 +11,25 @@ const gameboard = (function() {
     return {squares, reset};
 })();
 
-// const gameFlow = (function() {
-//     const players = [];
-//     const addPlayer = function(player) {
-//         players.push(player);
-//         return players;
-//     }
-// });
+const gameFlow = (function() {
+    const players = [];
+    const addPlayer = function(player) {
+        if (player.length > 2) {
+            console.log("There are already two players!");
+            return;
+        }
+        players.push(player);
+        return players;
+    }
+
+    let lastPlacement = null;
+    return {players, addPlayer, lastPlacement};
+})();
 
 const playerX = createPlayer("Xcalibur", "X");
 const playerO = createPlayer("Oracle", "O");
-const players = [];
-players.push(playerX, playerO);
+gameFlow.addPlayer(playerX);
+gameFlow.addPlayer(playerO);
 
 function checkForWin(marker) {
     for (let i = 0; i < gameboard.squares.length; i++) {
@@ -57,7 +64,7 @@ function checkForWin(marker) {
                 }
         }
         if (threeInARow) {
-            for (let player of players) {
+            for (let player of gameFlow.players) {
                 if (player.getMarker() == marker) {
                     player.claimVictory();
                     return player;
@@ -73,6 +80,9 @@ function createPlayer(name, marker) {
     }
 
     const placeMarker = function(position) {
+        if (gameFlow.lastPlacement == marker) return `Not ${name}'s Turn!`;
+
+        gameFlow.lastPlacement = marker;
         gameboard.squares[position - 1] = marker;
         checkForWin(marker);
         return gameboard.squares;
