@@ -1,14 +1,17 @@
 const gameboard = (function() {
-    let squares = [];
+    const squares = [];
     const reset = function() {
-        squares = [];
+        squares.splice(0, squares.length);
         for (let i = 0; i < 9; i++) {
             squares.push(null);
         }
         return squares;
     }
     reset();
-    return {squares, reset};
+    const getSquares = function() {
+        return squares;
+    }
+    return {getSquares, reset};
 })();
 
 const gameFlow = (function() {
@@ -32,13 +35,13 @@ gameFlow.addPlayer(playerX);
 gameFlow.addPlayer(playerO);
 
 function checkForWin(marker) {
-    for (let i = 0; i < gameboard.squares.length; i++) {
+    for (let i = 0; i < gameboard.getSquares().length; i++) {
         let threeInARow = false;
         switch (i + 1) {
             case 1:
             case 2:
             case 3:
-                if (gameboard.squares[i] == marker && gameboard.squares[i + 3] == marker && gameboard.squares[i + 6] == marker) {
+                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 3] == marker && gameboard.getSquares()[i + 6] == marker) {
                     threeInARow = true;
                     break;
                 }
@@ -46,19 +49,19 @@ function checkForWin(marker) {
             case 1:
             case 4:
             case 7:
-                if (gameboard.squares[i] == marker && gameboard.squares[i + 1] == marker && gameboard.squares[i + 2] == marker) {
+                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 1] == marker && gameboard.getSquares()[i + 2] == marker) {
                     threeInARow = true;
                     break;
                 }
     
             case 1:
-                if (gameboard.squares[i] == marker && gameboard.squares[i + 4] == marker && gameboard.squares[i + 8] == marker) {
+                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 4] == marker && gameboard.getSquares()[i + 8] == marker) {
                     threeInARow = true;
                     break;
                 }
     
             case 3:
-                if (gameboard.squares[i] == marker && gameboard.squares[i + 2] == marker && gameboard.squares[i + 4] == marker) {
+                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 2] == marker && gameboard.getSquares()[i + 4] == marker) {
                     threeInARow = true;
                     break;
                 }
@@ -81,12 +84,12 @@ function createPlayer(name, marker) {
 
     const placeMarker = function(position) {
         if (gameFlow.lastPlacement == marker) return `Not ${name}'s Turn!`;
-        if (gameboard.squares[position - 1] !== null) return `This square haas already been marked with ${gameboard.squares[position - 1]}`;
+        if (gameboard.getSquares()[position - 1] !== null) return `This square haas already been marked with ${gameboard.getSquares()[position - 1]}`;
 
         gameFlow.lastPlacement = marker;
-        gameboard.squares[position - 1] = marker;
+        gameboard.getSquares()[position - 1] = marker;
         checkForWin(marker);
-        return gameboard.squares;
+        return gameboard.getSquares();
     }
 
     const claimVictory = function() {
