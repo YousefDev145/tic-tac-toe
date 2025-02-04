@@ -36,32 +36,33 @@ const gameController = (function() {
             let threeConnected = false;
             switch (i + 1) {
                 case 1:
+                    if (squares[i] == marker && squares[i + 1] == marker && squares[i + 2] == marker) {
+                        threeConnected = true;
+                    }
+
+                    if (squares[i] == marker && squares[i + 4] == marker && squares[i + 8] == marker) {
+                        threeConnected = true;
+                    }
+
                 case 2:
                 case 3:
                     if (squares[i] == marker && squares[i + 3] == marker && squares[i + 6] == marker) {
                         threeConnected = true;
-                        break;
                     }
+                break;
         
-                case 1:
                 case 4:
                 case 7:
                     if (squares[i] == marker && squares[i + 1] == marker && squares[i + 2] == marker) {
                         threeConnected = true;
-                        break;
                     }
-        
-                case 1:
-                    if (squares[i] == marker && squares[i + 4] == marker && squares[i + 8] == marker) {
-                        threeConnected = true;
-                        break;
-                    }
+                break;
         
                 case 3:
                     if (squares[i] == marker && squares[i + 2] == marker && squares[i + 4] == marker) {
                         threeConnected = true;
-                        break;
                     }
+                break;
             }
 
             if (threeConnected) {
