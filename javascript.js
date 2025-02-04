@@ -14,7 +14,7 @@ const gameboard = (function() {
     }
 
     const placeMarker = function(marker, position) {
-        squares[position - 1] = marker;
+        squares[position] = marker;
     }
 
     return {getSquares, reset, placeMarker};
@@ -72,10 +72,17 @@ const gameController = (function() {
     }
 
     const playRound = function(postion) {
+        console.log(gameboard.getSquares()[postion]);
+        if (gameboard.getSquares()[postion] != null) {
+            console.log(`This square is already marked with ${gameboard.getSquares()[postion]}`);
+            return;
+        } 
+
         gameboard.placeMarker(activePlayer.marker, postion);
         console.log(gameboard.getSquares());
         checkForWin();
         switchPlayerTurn();
+        screenController.updateDisplay();
     }
 
     const declareWinner = function(player) {
@@ -84,4 +91,29 @@ const gameController = (function() {
     }
 
     return {playRound};
+})();
+
+const screenController = (function() {
+    const boardDiv = document.querySelector(".board");
+
+    const updateDisplay = function() {
+        boardDiv.textContent = "";
+        
+        for (let row = 0; row < 3; row++) {
+            for (let square = 0; square < 3; square++) {
+                const newSquare = document.createElement("button");
+                newSquare.classList.add("square");
+                const index = row * 3 + square;
+                newSquare.dataset.index = index;
+                newSquare.textContent = gameboard.getSquares()[index];
+                newSquare.addEventListener("click", () => {
+                    gameController.playRound(index);
+                })
+                boardDiv.appendChild(newSquare);
+            }
+        }
+    }
+    updateDisplay();
+
+    return {updateDisplay};
 })();
