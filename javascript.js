@@ -8,83 +8,80 @@ const gameboard = (function() {
         return squares;
     }
     reset();
+    
     const getSquares = function() {
         return squares;
     }
-    return {getSquares, reset};
+
+    const placeMarker = function(marker, position) {
+        squares[position - 1] = marker;
+    }
+
+    return {getSquares, reset, placeMarker};
 })();
 
 const gameController = (function() {
-    const players = [createPlayer("Xcalibur", "X"), createPlayer("Oracle", "O")];
-    const getPlayers = () => players;
+    const players = [{name: "Xcalibur", marker: "X"}, {name: "Oracle", marker: "O"}];
+    let activePlayer = players[0];
 
-    let lastPlacement = null;
-    return {getPlayers, lastPlacement};
-})();
+    const switchPlayerTurn = function() {
+        activePlayer = activePlayer == players[0] ? players[1] : players[0];
+    }
 
-const xPlayer = gameController.getPlayers().filter(e => e.getMarker() == "X")[0];
-const oPlayer = gameController.getPlayers().filter(e => e.getMarker() == "O")[0];
-function checkForWin(marker) {
-    for (let i = 0; i < gameboard.getSquares().length; i++) {
-        let threeInARow = false;
-        switch (i + 1) {
-            case 1:
-            case 2:
-            case 3:
-                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 3] == marker && gameboard.getSquares()[i + 6] == marker) {
-                    threeInARow = true;
-                    break;
-                }
-    
-            case 1:
-            case 4:
-            case 7:
-                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 1] == marker && gameboard.getSquares()[i + 2] == marker) {
-                    threeInARow = true;
-                    break;
-                }
-    
-            case 1:
-                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 4] == marker && gameboard.getSquares()[i + 8] == marker) {
-                    threeInARow = true;
-                    break;
-                }
-    
-            case 3:
-                if (gameboard.getSquares()[i] == marker && gameboard.getSquares()[i + 2] == marker && gameboard.getSquares()[i + 4] == marker) {
-                    threeInARow = true;
-                    break;
-                }
-        }
-        if (threeInARow) {
-            for (let player of gameController.getPlayers()) {
-                if (player.getMarker() == marker) {
-                    player.claimVictory();
-                    return player;
-                }
+    const checkForWin = function() {
+        let marker = activePlayer.marker;
+        let squares = gameboard.getSquares();
+
+        for (let i = 0; i < squares.length; i++) {
+            let threeConnected = false;
+            switch (i + 1) {
+                case 1:
+                case 2:
+                case 3:
+                    if (squares[i] == marker && squares[i + 3] == marker && squares[i + 6] == marker) {
+                        threeConnected = true;
+                        break;
+                    }
+        
+                case 1:
+                case 4:
+                case 7:
+                    if (squares[i] == marker && squares[i + 1] == marker && squares[i + 2] == marker) {
+                        threeConnected = true;
+                        break;
+                    }
+        
+                case 1:
+                    if (squares[i] == marker && squares[i + 4] == marker && squares[i + 8] == marker) {
+                        threeConnected = true;
+                        break;
+                    }
+        
+                case 3:
+                    if (squares[i] == marker && squares[i + 2] == marker && squares[i + 4] == marker) {
+                        threeConnected = true;
+                        break;
+                    }
+            }
+
+            if (threeConnected) {
+                declareWinner(activePlayer);
+                return;
             }
         }
     }
-}
 
-function createPlayer(name, marker) {
-    const getMarker = function() {
-        return marker;
+    const playRound = function(postion) {
+        gameboard.placeMarker(activePlayer.marker, postion);
+        console.log(gameboard.getSquares());
+        checkForWin();
+        switchPlayerTurn();
     }
 
-    const placeMarker = function(position) {
-        if (gameController.lastPlacement == marker) return `Not ${name}'s Turn!`;
-        if (gameboard.getSquares()[position - 1] !== null) return `This square haas already been marked with ${gameboard.getSquares()[position - 1]}`;
-
-        gameController.lastPlacement = marker;
-        gameboard.getSquares()[position - 1] = marker;
-        checkForWin(marker);
-        return gameboard.getSquares();
+    const declareWinner = function(player) {
+        console.log(`The Winner is ${player.name}!`);
+        return player.name;
     }
 
-    const claimVictory = function() {
-        console.log(`${name} claims victory!`);
-    }
-    
-    return {getMarker, placeMarker, claimVictory};
-}
+    return {playRound};
+})();
