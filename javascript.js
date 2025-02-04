@@ -14,26 +14,16 @@ const gameboard = (function() {
     return {getSquares, reset};
 })();
 
-const gameFlow = (function() {
-    const players = [];
-    const addPlayer = function(player) {
-        if (player.length > 2) {
-            console.log("There are already two players!");
-            return;
-        }
-        players.push(player);
-        return players;
-    }
+const gameController = (function() {
+    const players = [createPlayer("Xcalibur", "X"), createPlayer("Oracle", "O")];
+    const getPlayers = () => players;
 
     let lastPlacement = null;
-    return {players, addPlayer, lastPlacement};
+    return {getPlayers, lastPlacement};
 })();
 
-const playerX = createPlayer("Xcalibur", "X");
-const playerO = createPlayer("Oracle", "O");
-gameFlow.addPlayer(playerX);
-gameFlow.addPlayer(playerO);
-
+const xPlayer = gameController.getPlayers().filter(e => e.getMarker() == "X")[0];
+const oPlayer = gameController.getPlayers().filter(e => e.getMarker() == "O")[0];
 function checkForWin(marker) {
     for (let i = 0; i < gameboard.getSquares().length; i++) {
         let threeInARow = false;
@@ -67,7 +57,7 @@ function checkForWin(marker) {
                 }
         }
         if (threeInARow) {
-            for (let player of gameFlow.players) {
+            for (let player of gameController.getPlayers()) {
                 if (player.getMarker() == marker) {
                     player.claimVictory();
                     return player;
@@ -83,10 +73,10 @@ function createPlayer(name, marker) {
     }
 
     const placeMarker = function(position) {
-        if (gameFlow.lastPlacement == marker) return `Not ${name}'s Turn!`;
+        if (gameController.lastPlacement == marker) return `Not ${name}'s Turn!`;
         if (gameboard.getSquares()[position - 1] !== null) return `This square haas already been marked with ${gameboard.getSquares()[position - 1]}`;
 
-        gameFlow.lastPlacement = marker;
+        gameController.lastPlacement = marker;
         gameboard.getSquares()[position - 1] = marker;
         checkForWin(marker);
         return gameboard.getSquares();
