@@ -3,8 +3,17 @@
     margin: 0;
 }
 
+@font-face {
+    font-family: Knewave;
+    src: url(fonts/knewave-regular-webfont.woff) format("woff"),
+    url(fonts/knewave-regular-webfont.woff2) format("woff2");
+    font-size: normal;
+    font-weight: normal;
+}
+
 body {
     height: 100vh;
+    font-family: Knewave, 'Times New Roman', Times, serif;
     display: flex;
     justify-content: center;
     align-items: center;
