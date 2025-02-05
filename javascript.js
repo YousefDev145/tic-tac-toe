@@ -27,6 +27,14 @@ const gameController = (function() {
     let threeConnected = false;
     let winner = null;
 
+    const resetGame = function() {
+        activePlayer = players[0];
+        gameEnded = false;
+        threeConnected = false;
+        winner = null;
+        gameboard.reset();
+    }
+
     const switchPlayerTurn = function() {
         activePlayer = activePlayer == players[0] ? players[1] : players[0];
     }
@@ -70,10 +78,12 @@ const gameController = (function() {
             if (threeConnected) {
                 gameEnded = true;
                 winner = activePlayer;
+                screenController.showReplayButton();
                 return;
             }
             else if (squares.filter(e => e == null).length == 0) {
                 gameEnded = true;
+                screenController.showReplayButton();
                 return;
             }
         }
@@ -110,7 +120,7 @@ const gameController = (function() {
         }
     }
 
-    return {playRound, getState};
+    return {playRound, getState, resetGame};
 })();
 
 const screenController = (function() {
@@ -158,5 +168,15 @@ const screenController = (function() {
     }
     updateDisplay();
 
-    return {updateDisplay};
+    const showReplayButton = function() {
+        const replayBtn = document.querySelector(".replay");
+        replayBtn.removeAttribute("hidden");
+        replayBtn.addEventListener("click", () => {
+            gameController.resetGame();
+            updateDisplay();
+            replayBtn.setAttribute("hidden", "");
+        });
+    }
+
+    return {updateDisplay, showReplayButton};
 })();
