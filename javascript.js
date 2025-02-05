@@ -131,6 +131,27 @@ const screenController = (function() {
                 newSquare.addEventListener("click", () => {
                     gameController.playRound(index);
                 })
+
+                switch(row) {
+                    case 0:
+                        newSquare.classList.add("top");
+                    break;
+
+                    case 2:
+                        newSquare.classList.add("bottom");
+                    break;
+                }
+
+                switch(square) {
+                    case 0:
+                        newSquare.classList.add("left");
+                    break;
+
+                    case 2:
+                        newSquare.classList.add("right");
+                    break;
+                }
+
                 boardDiv.appendChild(newSquare);
             }
         }

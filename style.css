@@ -19,6 +19,25 @@ body {
     align-items: center;
 }
 
+button {
+    border: 8px solid black;
+    font-family: inherit;
+    font-size: 72px;
+}
+
+.top {
+    border-top: none;
+}
+.bottom {
+    border-bottom: none;
+}
+.left {
+    border-left: none;
+}
+.right {
+    border-right: none;
+}
+
 .container {
     display: flex;
     flex-direction: column;
