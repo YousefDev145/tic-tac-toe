@@ -10,6 +10,17 @@ body {
     align-items: center;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.turn {
+    text-align: center;
+    font-size: 30px;
+}
+
 .board {
     width: 500px;
     height: 500px;

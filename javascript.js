@@ -23,7 +23,9 @@ const gameboard = (function() {
 const gameController = (function() {
     const players = [{name: "Xcalibur", marker: "X"}, {name: "Oracle", marker: "O"}];
     let activePlayer = players[0];
-    let roundEnded = false;
+    let gameEnded = false;
+    let threeConnected = false;
+    let winner = null;
 
     const switchPlayerTurn = function() {
         activePlayer = activePlayer == players[0] ? players[1] : players[0];
@@ -34,7 +36,6 @@ const gameController = (function() {
         let squares = gameboard.getSquares();
 
         for (let i = 0; i < squares.length; i++) {
-            let threeConnected = false;
             switch (i + 1) {
                 case 1:
                     if (squares[i] == marker && squares[i + 1] == marker && squares[i + 2] == marker) {
@@ -67,21 +68,20 @@ const gameController = (function() {
             }
 
             if (threeConnected) {
-                declareWinner(activePlayer);
-                roundEnded = true;
+                gameEnded = true;
+                winner = activePlayer;
                 return;
             }
             else if (squares.filter(e => e == null).length == 0) {
-                roundEnded = true;
-                declareTie();
+                gameEnded = true;
                 return;
             }
         }
     }
 
     const playRound = function(postion) {
-        if (roundEnded) {
-            console.log("The round has ended!");
+        if (gameEnded) {
+            console.log("The game has ended!");
             return;
         }
 
@@ -96,24 +96,31 @@ const gameController = (function() {
         screenController.updateDisplay();
     }
 
-    const declareWinner = function(player) {
-        console.log(`The Winner is ${player.name}!`);
-        return player.name;
+    const getState = function() {
+        if (gameEnded) {
+            if (threeConnected) {
+                return `The winner is ${winner.name}!`;
+            }
+            else {
+                return "It's a tie!";
+            }
+        }
+        else {
+            return `It's ${activePlayer.name}'s turn...`
+        }
     }
 
-    const declareTie = function() {
-        console.log("It's a tie!");
-    }
-
-    return {playRound};
+    return {playRound, getState};
 })();
 
 const screenController = (function() {
+    const turnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
 
     const updateDisplay = function() {
+        turnDiv.textContent = gameController.getState();
         boardDiv.textContent = "";
-        
+
         for (let row = 0; row < 3; row++) {
             for (let square = 0; square < 3; square++) {
                 const newSquare = document.createElement("button");
