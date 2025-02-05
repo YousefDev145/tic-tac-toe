@@ -20,7 +20,7 @@ body {
     gap: 75px;
 }
 
-.display-container {
+.left-display-container {
     display: flex;
     flex-direction: column;
     align-items: center;

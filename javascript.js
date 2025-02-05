@@ -21,15 +21,16 @@ const gameboard = (function() {
 })();
 
 const gameController = (function() {
-    const players = [{name: "Xcalibur", marker: "X"}, {name: "Oracle", marker: "O"}];
+    const players = [{name: "Xcalibur", marker: "X", points: 0}, {name: "Oracle", marker: "O", points: 0}];
     let activePlayer = players[0];
-    let gameEnded = false;
+    let roundEnded = false;
     let threeConnected = false;
     let winner = null;
+    let currentRound = 1;
 
     const resetGame = function() {
         activePlayer = players[0];
-        gameEnded = false;
+        roundEnded = false;
         threeConnected = false;
         winner = null;
         gameboard.reset();
@@ -76,21 +77,27 @@ const gameController = (function() {
             }
 
             if (threeConnected) {
-                gameEnded = true;
+                roundEnded = true;
                 winner = activePlayer;
+                winner.points++;
                 screenController.showReplayButton();
                 return;
             }
             else if (squares.filter(e => e == null).length == 0) {
-                gameEnded = true;
+                roundEnded = true;
                 screenController.showReplayButton();
                 return;
             }
         }
     }
 
-    const playRound = function(postion) {
-        if (gameEnded) {
+    const startNewGame = function() {
+        resetGame();
+        currentRound++;
+    }
+
+    const playTurn = function(postion) {
+        if (roundEnded) {
             console.log("The game has ended!");
             return;
         }
@@ -102,12 +109,12 @@ const gameController = (function() {
 
         gameboard.placeMarker(activePlayer.marker, postion);
         checkForWin();
-        if (!gameEnded) switchPlayerTurn();
+        if (!roundEnded) switchPlayerTurn();
         screenController.updateDisplay();
     }
 
     const getState = function() {
-        if (gameEnded) {
+        if (roundEnded) {
             if (threeConnected) {
                 return `The winner is ${winner.name}!`;
             }
@@ -119,17 +126,36 @@ const gameController = (function() {
             return `It's ${activePlayer.name}'s turn...`
         }
     }
+    
+    const getCurrentRound = () => currentRound;
 
-    return {playRound, getState, resetGame};
+    const getPlayerName = index => players[index].name;
+    const getPlayerPoints = index => players[index].points;
+
+    return {playTurn, getState, getCurrentRound, getPlayerName, getPlayerPoints, startNewGame};
 })();
 
 const screenController = (function() {
     const turnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
 
+    const currentRoundDiv = document.querySelector(".current-round");
+    const player1PointsDiv = document.querySelector(".player-1-points");
+    const player2PointsDiv = document.querySelector(".player-2-points");
+
+    const replayBtn = document.querySelector(".replay");
+    replayBtn.addEventListener("click", () => {
+        gameController.startNewGame();
+        updateDisplay();
+        replayBtn.setAttribute("hidden", "");
+    });
+
     const updateDisplay = function() {
         turnDiv.textContent = gameController.getState();
         boardDiv.textContent = "";
+        currentRoundDiv.textContent = `Round ${gameController.getCurrentRound()}`;
+        player1PointsDiv.textContent = `${gameController.getPlayerName(0)}: ${gameController.getPlayerPoints(0)}`;
+        player2PointsDiv.textContent = `${gameController.getPlayerName(1)}: ${gameController.getPlayerPoints(1)}`;
 
         for (let row = 0; row < 3; row++) {
             for (let square = 0; square < 3; square++) {
@@ -139,7 +165,7 @@ const screenController = (function() {
                 newSquare.dataset.index = index;
                 newSquare.textContent = gameboard.getSquares()[index];
                 newSquare.addEventListener("click", () => {
-                    gameController.playRound(index);
+                    gameController.playTurn(index);
                 })
 
                 switch(row) {
@@ -169,13 +195,7 @@ const screenController = (function() {
     updateDisplay();
 
     const showReplayButton = function() {
-        const replayBtn = document.querySelector(".replay");
         replayBtn.removeAttribute("hidden");
-        replayBtn.addEventListener("click", () => {
-            gameController.resetGame();
-            updateDisplay();
-            replayBtn.setAttribute("hidden", "");
-        });
     }
 
     return {updateDisplay, showReplayButton};
