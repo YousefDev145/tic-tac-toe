@@ -15,9 +15,14 @@ body {
     height: 100vh;
     font-family: Knewave, 'Times New Roman', Times, serif;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    gap: 75px;
+}
+
+.screen {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 
 .left-display-container {
@@ -49,9 +54,11 @@ body {
     font-size: 100px;
 }
 
-.right-display {
+.right-display-container {
     display: flex;
     flex-direction: column;
+    justify-content: start;
+    gap: 75px;;
 }
 
 .game-results {
