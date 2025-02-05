@@ -23,6 +23,7 @@ const gameboard = (function() {
 const gameController = (function() {
     const players = [{name: "Xcalibur", marker: "X"}, {name: "Oracle", marker: "O"}];
     let activePlayer = players[0];
+    let roundEnded = false;
 
     const switchPlayerTurn = function() {
         activePlayer = activePlayer == players[0] ? players[1] : players[0];
@@ -67,20 +68,29 @@ const gameController = (function() {
 
             if (threeConnected) {
                 declareWinner(activePlayer);
+                roundEnded = true;
+                return;
+            }
+            else if (squares.filter(e => e == null).length == 0) {
+                roundEnded = true;
+                declareTie();
                 return;
             }
         }
     }
 
     const playRound = function(postion) {
-        console.log(gameboard.getSquares()[postion]);
+        if (roundEnded) {
+            console.log("The round has ended!");
+            return;
+        }
+
         if (gameboard.getSquares()[postion] != null) {
             console.log(`This square is already marked with ${gameboard.getSquares()[postion]}`);
             return;
         } 
 
         gameboard.placeMarker(activePlayer.marker, postion);
-        console.log(gameboard.getSquares());
         checkForWin();
         switchPlayerTurn();
         screenController.updateDisplay();
@@ -89,6 +99,10 @@ const gameController = (function() {
     const declareWinner = function(player) {
         console.log(`The Winner is ${player.name}!`);
         return player.name;
+    }
+
+    const declareTie = function() {
+        console.log("It's a tie!");
     }
 
     return {playRound};
