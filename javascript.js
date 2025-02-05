@@ -145,7 +145,7 @@ const screenController = (function() {
     replayBtn.addEventListener("click", () => {
         gameController.startNewGame();
         updateDisplay();
-        replayBtn.setAttribute("hidden", "");
+        replayBtn.style.visibility = "hidden";
     });
 
     const updateDisplay = function() {
@@ -193,7 +193,7 @@ const screenController = (function() {
     updateDisplay();
 
     const showReplayButton = function() {
-        replayBtn.removeAttribute("hidden");
+        replayBtn.style.visibility = "visible";
     }
 
     return {updateDisplay, showReplayButton};

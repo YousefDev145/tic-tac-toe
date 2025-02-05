@@ -48,6 +48,22 @@ body {
     font-size: 100px;
 }
 
+.right-display {
+    display: flex;
+    flex-direction: column;
+}
+
+.game-results {
+    font-size: 36px;;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.current-round {
+    font-size: 54px;
+}
+
 .replay {
     padding: 5px 10px;
     font-size: 54px;
