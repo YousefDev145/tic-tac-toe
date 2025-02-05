@@ -60,17 +60,15 @@ const gameController = (function() {
                     if (squares[i] == marker && squares[i + 3] == marker && squares[i + 6] == marker) {
                         threeConnected = true;
                     }
+
+                    if (squares[i] == marker && squares[i + 2] == marker && squares[i + 4] == marker) {
+                        threeConnected = true;
+                    }
                 break;
         
                 case 4:
                 case 7:
                     if (squares[i] == marker && squares[i + 1] == marker && squares[i + 2] == marker) {
-                        threeConnected = true;
-                    }
-                break;
-        
-                case 3:
-                    if (squares[i] == marker && squares[i + 2] == marker && squares[i + 4] == marker) {
                         threeConnected = true;
                     }
                 break;
