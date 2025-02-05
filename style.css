@@ -19,10 +19,31 @@ body {
     align-items: center;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 75px;
+}
+
+.turn {
+    text-align: center;
+    font-size: 54px;
+}
+
+.board {
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
 button {
+    padding: 0;
     border: 8px solid black;
     font-family: inherit;
-    font-size: 72px;
+    font-size: 100px;
 }
 
 .top {
@@ -36,23 +57,4 @@ button {
 }
 .right {
     border-right: none;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-.turn {
-    text-align: center;
-    font-size: 30px;
-}
-
-.board {
-    width: 500px;
-    height: 500px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
 }
