@@ -92,7 +92,7 @@ const gameController = (function() {
 
         gameboard.placeMarker(activePlayer.marker, postion);
         checkForWin();
-        switchPlayerTurn();
+        if (!gameEnded) switchPlayerTurn();
         screenController.updateDisplay();
     }
 
