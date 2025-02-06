@@ -35,6 +35,19 @@ body {
     gap: 10px;
 }
 
+#name-setting-form label {
+    font-size: 30px
+}
+
+#name-setting-form input, #name-setting-form button {
+    border-radius: 15px;
+    font-family: inherit;
+}
+
+#name-setting-form input {
+    padding: 5px 10px;
+}
+
 .screen {
     width: 100%;
     display: flex;
