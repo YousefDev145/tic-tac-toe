@@ -23,7 +23,7 @@ body {
     margin: auto;
 }
 
-.name-setting-form {
+#name-setting-form {
     display: flex;
     flex-direction: column;
     gap: 50px;
