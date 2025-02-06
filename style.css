@@ -74,6 +74,7 @@ body {
 
 .replay {
     padding: 5px 10px;
+    border-radius: 15px;
     font-size: 54px;
 }
 
