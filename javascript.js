@@ -1,3 +1,12 @@
+const nameSettingDialog = document.querySelector(".name-setting-dialog");
+const nameSubmitBtn = document.querySelector(".name-submit");
+nameSubmitBtn.addEventListener("click", () => {
+    const nameSettingForm = document.forms["name-setting-form"];
+    gameController.setPlayerNames(nameSettingForm.elements["player-1-name"].value, nameSettingForm.elements["player-2-name"].value);
+    screenController.updateDisplay();
+});
+nameSettingDialog.showModal();
+
 const gameboard = (function() {
     const squares = [];
     const reset = function() {
@@ -27,6 +36,11 @@ const gameController = (function() {
     let threeConnected = false;
     let winner = null;
     let currentRound = 1;
+
+    const setPlayerNames = function(playerOne, playerTwo) {
+        players[0].name = playerOne;
+        players[1].name = playerTwo;
+    }
 
     const resetGame = function() {
         activePlayer = players[0];
@@ -130,7 +144,7 @@ const gameController = (function() {
     const getPlayerName = index => players[index].name;
     const getPlayerPoints = index => players[index].points;
 
-    return {playTurn, getState, getCurrentRound, getPlayerName, getPlayerPoints, startNewGame};
+    return {setPlayerNames, playTurn, getState, getCurrentRound, getPlayerName, getPlayerPoints, startNewGame};
 })();
 
 const screenController = (function() {
