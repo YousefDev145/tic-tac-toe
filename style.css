@@ -99,7 +99,7 @@ button:hover {
 .right-display-container {
     display: flex;
     flex-direction: column;
-    gap: 75px;;
+    gap: 100px;
 }
 
 .game-results {
@@ -111,7 +111,8 @@ button:hover {
 }
 
 .current-round {
-    align-self: start;
+    /* align-self: start; */
+    margin-bottom: 100px;
 }
 
 .replay {
