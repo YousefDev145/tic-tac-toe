@@ -15,7 +15,8 @@ body {
     height: 100vh;
     font-family: Knewave, 'Times New Roman', Times, serif;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -54,6 +55,7 @@ body {
 
 .screen {
     width: 65%;
+    margin-top: 50px;
     display: flex;
     justify-content: space-between;
 }

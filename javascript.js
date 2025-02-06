@@ -7,6 +7,9 @@ nameSubmitBtn.addEventListener("click", () => {
 });
 nameSettingDialog.showModal();
 
+const footer = document.querySelector("#footer");
+footer.textContent = `© ${new Date().getFullYear()} Yusef Bakr`
+
 const gameboard = (function() {
     const squares = [];
     const reset = function() {
